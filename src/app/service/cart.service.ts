@@ -113,10 +113,7 @@ constructor(private http:HttpClient,
         
 
         this.CalculateTotal();
-        if(prod.id!==0){
-          console.log('+++++++++++++++++++++NULL ID++++++++++++++++++')
-        }
-
+       
         this.cartDataclient.prodData[0].incart=this.cartDataServer.data[0].numInCart;
         this.cartDataclient.prodData[0].id=prod.id;
         this.cartDataclient.total=this.cartDataServer.total;
@@ -207,7 +204,8 @@ UpdateCartItems(index:number,increase:boolean){
     data.numInCart<data.product.quantity?data.numInCart++:data.product?.quantity;
     this.cartDataclient.prodData[index].incart=data.numInCart;
      //TODO CALCULATE TOTAL AMOUNT
-     this.cartDataclient.total=this.cartDataServer.total;
+     this.CalculateTotal();
+     //this.cartDataclient.total=this.cartDataServer.total;
      localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
      this.cartData$.next({...this.cartDataServer});
   }
@@ -219,7 +217,8 @@ UpdateCartItems(index:number,increase:boolean){
       this.cartData$.next({...this.cartDataServer}); 
       this.cartDataclient.prodData[index].incart=data.numInCart;
        //TODO CALCULATE TOTAL AMOUNT
-       this.cartDataclient.total=this.cartDataServer.total;
+       this.CalculateTotal();
+       //this.cartDataclient.total=this.cartDataServer.total;
        localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
     }
 
@@ -233,7 +232,8 @@ DeleteProductFromCart(index:number){
     this.cartDataServer.data.splice(index,1);
     this.cartDataclient.prodData.splice(index,1);
     //TODO CALCULATE TOTAL AMOUNT
-    this.cartDataclient.total=this.cartDataServer.total;
+    //this.cartDataclient.total=this.cartDataServer.total;
+    this.CalculateTotal();
     if(this.cartDataclient.total==0){
       this.cartDataclient={total:0,prodData:[{incart:0,id:0,}]}
       localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
