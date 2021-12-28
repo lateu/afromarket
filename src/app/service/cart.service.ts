@@ -31,8 +31,10 @@ private cartDataclient:CartModelPublic={
 private cartDataServer:CartModelServer={
   total:0,
   data:[{
+    product:undefined,
     numInCart : 0,
-    product:undefined
+    
+    //product:{id:-1,name:'NO-Name',category:'',description:'',image:'',price:0,quantity:0,images:''}
   }]
 }
 
@@ -106,30 +108,31 @@ constructor(private http:HttpClient,
       //if the cart is empty
       //console.log('+++++++++++++++++++++++++++AddProductToCart++++called+++with+++ +id='+id+" quanty="+quantity)
       if(this.cartDataServer.data[0].product===undefined){
-        this.cartDataServer.data[0].product=prod;
+       this.cartDataServer.data[0].product=prod;
         this.cartDataServer.data[0].numInCart=quantity!==undefined?quantity:1;
-        //TODO  CALCULATE TOTAL AMOUNT
+        
+
         this.CalculateTotal();
+        if(prod.id!==0){
+          console.log('+++++++++++++++++++++NULL ID++++++++++++++++++')
+        }
 
         this.cartDataclient.prodData[0].incart=this.cartDataServer.data[0].numInCart;
         this.cartDataclient.prodData[0].id=prod.id;
         this.cartDataclient.total=this.cartDataServer.total;
         localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
         this.cartData$.next({...this.cartDataServer});
-       // console.log('+++++++++++++++++++++++++++AddProductToCart++++add from empty+++++++++++++++++++++++')
-
-        // TODO Display toast notification
+       
         this.toast.success(`${prod.name} added to the cart`,`Product added`, {
           timeOut:1500,
           progressBar:true,
           progressAnimation:'increasing',
           positionClass:'toast-top-right',
         })
-      }
-      // 2- if cart has some items
-      else{
+      }else{
 
-        
+        // 2- if cart has some items
+
         let index=this.cartDataServer.data.findIndex(p=>p.product?.id===prod.id);  //-1 or a positive value
         
        
@@ -142,26 +145,15 @@ constructor(private http:HttpClient,
             this.cartDataServer.data[index].numInCart=this.cartDataServer.data[index].numInCart<prod.quantity?quantity:prod.quantity;
 
           }else{
-            //this.cartDataServer.data[index].numInCart=this.cartDataServer.data[index].numInCart<prod.quantity?this.cartDataServer.data[index].numInCart++:prod.quantity;
             this.cartDataServer.data[index].numInCart<prod.quantity?this.cartDataServer.data[index].numInCart++:prod.quantity;
-            console.log('+++++++++++++++++++++++++index++++++++++++++++++++');
-            console.log(index);
-            console.log('+++++++++++++++++++++++++++AddProductToCart++++increase quantity+++++++++++++++++++++++')
-            console.log(this.cartDataServer.data[index].numInCart)
-            console.log(prod.quantity)
-            //console.log(this.cartDataServer.data[index].numInCart++)
-
           }
 
-          //console.log('++++++numInCart+++++++');
-          //console.log(this.cartDataServer.data[index].numInCart)
-  
 
           this.cartDataclient.prodData[index].incart=this.cartDataServer.data[index].numInCart;
           this.CalculateTotal();
           this.cartDataclient.total=this.cartDataServer.total;
           localStorage.setItem('cart',JSON.stringify(this.cartDataclient))
-          // TODO Display toast notification
+         
           this.toast.info(`${prod.name} updated in the cart`,`Product updated`, {
             timeOut:1500,
             progressBar:true,
@@ -169,12 +161,9 @@ constructor(private http:HttpClient,
             positionClass:'toast-top-right',
           })
 
-        }
-
-         //b- if that item is not in the cart
-
-         else{
-          console.log('+++++++++++++++++++++++++++AddProductToCart++++add new+++++++++++++++++++++++')
+        }else{
+          //b- if that item is not in the cart
+         
          this.cartDataServer.data.push({
            numInCart:1,
            product:prod
@@ -183,9 +172,11 @@ constructor(private http:HttpClient,
            incart:1,
            id:prod.id
          });
+          console.log('+++++++++++++++++++++++++++AddProductToCart++++add new+++++++++++++++++++++++')
+          //delete this.cartDataclient.prodData[0];
+          console.log(this.cartDataclient.prodData[0])
 
-         //localStorage.setItem('cart',JSON.stringify(this.cartDataclient))
-         //TODO CALCULATE TOTAL AMOUNT
+    
          this.CalculateTotal();
          this.cartDataclient.total=this.cartDataServer.total;
          localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
@@ -197,11 +188,7 @@ constructor(private http:HttpClient,
             progressBar:true,
             progressAnimation:'increasing',
             positionClass:'toast-top-right',
-          })
-
-          
-        
-         
+          })        
 
          } // ENF OF ELSE
 
@@ -255,7 +242,7 @@ DeleteProductFromCart(index:number){
     }
 
     if(this.cartDataServer.total==0){
-      this.cartDataServer={total:0,data:[{numInCart:0,product:undefined,}]};
+      this.cartDataServer={total:0,data:[{numInCart:0,product:{id:0,name:'',category:'',description:'',image:'',price:0,quantity:0,images:''},}]};
       this.cartData$.next({...this.cartDataServer});
     }else{
       this.cartData$.next({...this.cartDataServer});
@@ -336,7 +323,7 @@ private resetServerData(){
     total:0,
     data:[{
       numInCart:0,
-      product:undefined
+      product:{id:0,name:'',category:'',description:'',image:'',price:0,quantity:0,images:''}
     }]
   };
 }
