@@ -201,24 +201,25 @@ UpdateCartItems(index:number,increase:boolean){
   if(increase){
 
     if(data.product){
-    data.numInCart<data.product.quantity?data.numInCart++:data.product?.quantity;
-    this.cartDataclient.prodData[index].incart=data.numInCart;
+      data.numInCart<data.product.quantity?data.numInCart++:data.product?.quantity;
+      this.cartDataclient.prodData[index].incart=data.numInCart;
      //TODO CALCULATE TOTAL AMOUNT
      this.CalculateTotal();
-     //this.cartDataclient.total=this.cartDataServer.total;
+     this.cartDataclient.total=this.cartDataServer.total;
      localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
      this.cartData$.next({...this.cartDataServer});
-  }
+    }
   }else{
     data.numInCart--;
     if(data.numInCart<1){
+      this.DeleteProductFromCart(index);
       this.cartData$.next({...this.cartDataServer});  
     }else{
       this.cartData$.next({...this.cartDataServer}); 
       this.cartDataclient.prodData[index].incart=data.numInCart;
        //TODO CALCULATE TOTAL AMOUNT
        this.CalculateTotal();
-       //this.cartDataclient.total=this.cartDataServer.total;
+       this.cartDataclient.total=this.cartDataServer.total;
        localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
     }
 
@@ -232,17 +233,19 @@ DeleteProductFromCart(index:number){
     this.cartDataServer.data.splice(index,1);
     this.cartDataclient.prodData.splice(index,1);
     //TODO CALCULATE TOTAL AMOUNT
-    //this.cartDataclient.total=this.cartDataServer.total;
+    
     this.CalculateTotal();
-    if(this.cartDataclient.total==0){
-      this.cartDataclient={total:0,prodData:[{incart:0,id:0,}]}
+    this.cartDataclient.total=this.cartDataServer.total;
+    if(this.cartDataclient.total===0){
+      this.cartDataclient={prodData:[{incart:0,id:0,}],total:0}
       localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
     }else{
       localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
     }
 
-    if(this.cartDataServer.total==0){
-      this.cartDataServer={total:0,data:[{numInCart:0,product:{id:0,name:'',category:'',description:'',image:'',price:0,quantity:0,images:''},}]};
+    if(this.cartDataServer.total===0){
+      //this.cartDataServer={total:0,data:[{numInCart:0,product:{id:0,name:'',category:'',description:'',image:'',price:0,quantity:0,images:''},}]};
+      this.cartDataServer={total:0,data:[{numInCart:0,product:undefined}]};
       this.cartData$.next({...this.cartDataServer});
     }else{
       this.cartData$.next({...this.cartDataServer});
