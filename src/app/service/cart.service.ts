@@ -15,7 +15,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   providedIn: 'root'
 })
 export class CartService {
-  private serverURL = environment.URL;
+  private serverURL = environment.HOST;
 
 //data variable too store the cart information on the client's local storage to be sent to the backend server as post datas
 private cartDataclient:CartModelPublic={
@@ -275,12 +275,12 @@ private CalculateTotal(){
 }
 
 public CheckOutFromCart(userId:Number){
-  this.http.post(`${this.serverURL}Orders/payment`,null).subscribe((res:any /*original value res:{success:boolean}*/)=>{
+  this.http.post(`${this.serverURL}/orders/payment`,null).subscribe((res:any /*original value res:{success:boolean}*/)=>{
   // console.clear();
-  
+  res.success=true;
   if(res.success){
     this.resetServerData();
-    this.http.post(`${this.serverURL}Orders/new`,{userId:userId,
+    this.http.post(`${this.serverURL}/orders/new`,{userId:userId,
                                                   products:this.cartDataclient.prodData
                                                 }).subscribe((data:any /**original value data:OrderResponse */)=>{
                                                   this.orderService.getSingleOrder(data.order_id).then(prods=>{

@@ -19,8 +19,9 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this._productServ.getAllProducts().subscribe((prods:ServerResponse)=>{
       //var json = JSON.parse(prods.valueOf(count()));
-     // console.log(prods)
-     // console.log(prods.products)
+      //console.log('---------------HOME--------COMPON------------------------')
+      //console.log(prods)
+      //console.log(prods.products)
       this.products=prods.products;
     })
     }
