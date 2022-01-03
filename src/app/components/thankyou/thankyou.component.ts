@@ -10,7 +10,8 @@ import { OrderService } from 'src/app/service/order.service';
 export class ThankyouComponent implements OnInit {
 message="";
 orderId=0;
-products:any;
+//products:any;
+products :ProductResponseModel[]=[];
 cartTotal=0;
   constructor(private router:Router, private orderService:OrderService) {
     const navigation=this.router.getCurrentNavigation();
@@ -24,7 +25,7 @@ cartTotal=0;
     this.orderId=state.orderId;
     this.products=state.products;
     this.cartTotal=state.total;
-    console.log(this.products)
+    //console.log(state)
 
    }
 
@@ -35,7 +36,7 @@ cartTotal=0;
 
 interface ProductResponseModel{
   id: number;
-  title: string;
+  name: string;
   category: string;
   description: string;
   price: number;

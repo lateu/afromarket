@@ -14,9 +14,13 @@ import { CartService } from 'src/app/service/cart.service';
 })
 export class HomeComponent implements OnInit {
   products :ProductModelServer[]=[];
+  category="";
   constructor(private  _productServ:ProductService,private _cardService:CartService,private  router:Router) { }
 
   ngOnInit(): void {
+    if(this.category===""){
+      this.category="Food"
+    }
     this._productServ.getAllProducts().subscribe((prods:ServerResponse)=>{
       //var json = JSON.parse(prods.valueOf(count()));
       //console.log('---------------HOME--------COMPON------------------------')

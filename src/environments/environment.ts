@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
- // HOST:'http://localhost:3000/api',
-  HOST:'http://localhost/afromarketapi'
+  HOST:'http://localhost:3000/api',
+ // HOST:'http://localhost/afromarketapi'
 };
 
 /*
