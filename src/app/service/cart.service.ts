@@ -59,7 +59,7 @@ constructor(private http:HttpClient,
     console.log("-------------cart service contructor access-1---")
  
     if(token!==null){
-      console.log("-------------cart service contructor access-2---")
+      console.log("-------------cart service contructor access-2--no empty cart-")
       let info: CartModelPublic=JSON.parse(token);
 
     // check if the info variable is null or has some data in it
@@ -76,7 +76,7 @@ constructor(private http:HttpClient,
              this.cartDataServer.data[0].product=actualProductInfo;
 
              // todo create calculetotal function and replace it here
-
+             this.CalculateTotal();
              this.cartDataclient.total=this.cartDataServer.total;
 
              localStorage.setItem('cart',JSON.stringify(this.cartDataclient))
@@ -89,6 +89,7 @@ constructor(private http:HttpClient,
              });
 
              //todo  create calculateTotal function and replace it here
+             this.CalculateTotal();
              this.cartDataclient.total=this.cartDataServer.total;
              localStorage.setItem('cart', JSON.stringify(this.cartDataclient))
            }
@@ -275,9 +276,12 @@ private CalculateTotal(){
 }
 
 public CheckOutFromCart(userId:Number){
+  const body=JSON.stringify({userId:userId,
+    products:this.cartDataclient.prodData
+  })
   this.http.post(`${this.serverURL}/orders/payment`,null).subscribe((res:any /*original value res:{success:boolean}*/)=>{
   // console.clear();
-  //res.success=true;
+  res.success=true;
   if(res.success){
     this.resetServerData();
     this.http.post(`${this.serverURL}/orders/new`,{userId:userId,

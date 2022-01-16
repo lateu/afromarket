@@ -8,9 +8,9 @@ import { CartService } from 'src/app/service/cart.service';
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
-  cartData={} as CartModelServer ;
-  cartTotal=0 ;
-  subTotal=0;
+  cartData:CartModelServer ;
+  cartTotal:number ;
+  subTotal:number;
 
   constructor(public cartService:CartService) { }
 

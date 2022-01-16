@@ -4,13 +4,13 @@
   <div id="top-header">
     <div class="container">
       <ul class="header-links pull-left">
-        <li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-        <li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-        <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+        <li><a href="#"><i class="fa fa-phone"></i> +1 404-259-18-41</a></li>
+        <li><a href="#"><i class="fa fa-envelope-o"></i> contact@afrozone.com</a></li>
+        <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road smyrna, GA</a></li>
       </ul>
       <ul class="header-links pull-right">
         <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-        <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
+        <li><a routerLink="/profile" ><i class="fa fa-user-o"></i> {{authState===false?'LOGIN':'My Account'}}</a></li>
       </ul>
     </div>
   </div>
