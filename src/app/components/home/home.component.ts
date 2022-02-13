@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import {count} from "rxjs/operators";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 import {ProductService} from "../../service/product.service";
 import { ProductModelServer, ServerResponse } from 'src/app/models/Product';
@@ -15,7 +15,7 @@ import { CartService } from 'src/app/service/cart.service';
 export class HomeComponent implements OnInit {
   products :ProductModelServer[]=[];
   category="";
-  constructor(private  _productServ:ProductService,private _cardService:CartService,private  router:Router) { }
+  constructor(private  _productServ:ProductService,private _cardService:CartService,private  router:Router,private route:ActivatedRoute) { }
 
   ngOnInit(): void {
     if(this.category===""){
