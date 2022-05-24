@@ -19,6 +19,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { FormsModule } from '@angular/forms';
 import { SocialLoginModule,SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider} from 'angularx-social-login';
+import { SignupComponent } from './components/signup/signup.component';
+import { PictureComponent } from './components/picture/picture.component';
 
 
 @NgModule({
@@ -33,6 +35,8 @@ import { GoogleLoginProvider} from 'angularx-social-login';
     ThankyouComponent,
     LoginComponent,
     ProfileComponent,
+    SignupComponent,
+    PictureComponent,
   ],
   imports: [
     BrowserModule,

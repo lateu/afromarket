@@ -116,7 +116,7 @@ constructor(private http:HttpClient,
         this.CalculateTotal();
        
         this.cartDataclient.prodData[0].incart=this.cartDataServer.data[0].numInCart;
-        this.cartDataclient.prodData[0].id=prod.id;
+        this.cartDataclient.prodData[0].id=prod._id;
         this.cartDataclient.total=this.cartDataServer.total;
         localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
         this.cartData$.next({...this.cartDataServer});
@@ -131,7 +131,7 @@ constructor(private http:HttpClient,
 
         // 2- if cart has some items
 
-        let index=this.cartDataServer.data.findIndex(p=>p.product?.id===prod.id);  //-1 or a positive value
+        let index=this.cartDataServer.data.findIndex(p=>p.product?._id===prod._id);  //-1 or a positive value
         
        
         // a- if that item is already in the cart=> index is positive value
@@ -168,7 +168,7 @@ constructor(private http:HttpClient,
          });
          this.cartDataclient.prodData.push({
            incart:1,
-           id:prod.id
+           id:prod._id
          });
           console.log('+++++++++++++++++++++++++++AddProductToCart++++add new+++++++++++++++++++++++')
           //delete this.cartDataclient.prodData[0];
@@ -330,7 +330,7 @@ private resetServerData(){
     total:0,
     data:[{
       numInCart:0,
-      product:{id:0,name:'',category:'',description:'',image:'',price:0,quantity:0,images:''}
+      product:{_id:0,name:'',category:'',description:'',image:'',price:0,quantity:0,images:''}
     }]
   };
 }
@@ -355,7 +355,7 @@ interface OrderResponse{
   success:boolean;
   message:string;
   products:[{
-    id:string,
+    id:number,
     numInCart:string
   }];
 }

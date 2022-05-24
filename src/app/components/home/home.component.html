@@ -12,8 +12,8 @@
             <img src="./assets/img/food-profile.png" alt="">
           </div>
           <div class="shop-body">
-            <h3>Food</h3>
-            <a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+            <h3>Restaurant</h3>
+            <a [routerLink]="['/products','food']" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
       </div>
@@ -26,8 +26,8 @@
             <img src="./assets/img/receipe-profile.png" alt="">
           </div>
           <div class="shop-body">
-            <h3>Receipe</h3>
-            <a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+            <h3>Receipes</h3>
+            <a  [routerLink]="['/products','receipe']" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
       </div>
@@ -40,8 +40,8 @@
             <img src="./assets/img/clothe-profile.png" alt="">
           </div>
           <div class="shop-body">
-            <h3><br>Clothes</h3>
-            <a href="#" class="cta-btn">Shop now </a>
+            <h3><br>Dresses</h3>
+            <a  [routerLink]="['/products','dress']" class="cta-btn">Shop now </a>
           </div>
         </div>
       </div>
@@ -71,17 +71,16 @@
 
       <!-- Products tab & slick -->
       <div class="col-md-12">
-
+       
             <div  class="row">
               <div class="col-md-4 col-sm-6" *ngFor="let p of products">
+             
                 <div class="card my-2">
-                  <img [src]="p.image" alt="{{p.name}}" width="200px" class="card-img-top" style="cursor: pointer;" (click)="selectedProduct(p.id)">
-                  <div class="card-header">
-                    <div class="card-title">
-                      <p>{{p.name | titlecase}}</p>
-                    </div>
-                  </div>
+               
+                  <app-picture [id]="p._id" [name]="p.name" (click)="selectedProduct(p._id)"></app-picture>
+                                 
                   <div class="card-body">
+                    <p>{{p.name | titlecase}}</p>
                     <h6>{{p.description.substr(0, 40)}} ....</h6>
                     <p class="lead">{{p.price | currency:'USD'}}</p>
                   </div>
@@ -90,11 +89,30 @@
                       <button class="btn btn-outline-primary btn-sm btn-block"
                               [class.disabled]="p.quantity < 1"
                               [class.btn-outline-danger]="p.quantity < 1"
-                              (click)="AddToCart(p.id)"
+                              (click)="AddToCart(p._id)"
                       >
                         {{ p.quantity < 1 ? "NO STOCK" : "Add To Cart"}}
                       </button>
                     </div>
+                  </div>
+                  <div class="product-details" style="text-align: center;">
+                    <div>
+                      <div class="product-rating">
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star-o"></i>
+                      </div>
+                      <a class="review-link" href="#">10 Review(s) | Add your review</a>
+                     </div>
+                      <ul class="product-links">
+                        <li>Share:</li>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                    
+                      </ul> 
                   </div>
                 </div>
 

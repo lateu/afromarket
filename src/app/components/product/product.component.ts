@@ -21,16 +21,19 @@ export class ProductComponent implements OnInit,AfterViewInit {
 
 
   ngOnInit(): void {
+   
     this.route.paramMap
     .pipe(
       map((param:ParamMap)=>{
+              
         return param.get('id');
       })
     ).subscribe(prodId=>{
+     
       this.id=Number(prodId);
       this.productService.getSingleProduct(this.id).subscribe(prod=>{
         this.product=prod;
-        console.log( this.product)
+        
         if(prod.images!=null){
           this.thumbImages=prod.images.split(';');
         }

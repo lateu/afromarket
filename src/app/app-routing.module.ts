@@ -9,6 +9,7 @@ import {CheckoutComponent} from "./components/checkout/checkout.component";
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileGuard } from './guard/profile.guard';
+import { SignupComponent } from './components/signup/signup.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,9 @@ const routes: Routes = [
   },
   {
     path:'product/:id', component:ProductComponent
+  },
+  {
+    path:'products/:category',component:HomeComponent
   },
   {
     path:'cart', component:CartComponent
@@ -29,6 +33,11 @@ const routes: Routes = [
   {
     path:'login',component:LoginComponent
   },
+
+  {
+    path:'signup',component:SignupComponent
+  },
+
   {path:'profile',component:ProfileComponent, canActivate:[ProfileGuard]}
 ];
 
