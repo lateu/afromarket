@@ -26,7 +26,14 @@ export class CheckoutComponent implements OnInit {
 
   doCheckout(){
     this.spinner.show().then(p=>{
-      this.cartService.CheckOutFromCart(2);
+ 
+      //console.log("-*----------------login------data----")
+      const loginData=JSON.parse(localStorage.getItem("jwt")) 
+      const userId=loginData["user"]['_id']
+     
+
+      //this.cartService.CheckOutFromCart(userId);
+      this.cartService.CheckOutFromCart();
     })
 
 

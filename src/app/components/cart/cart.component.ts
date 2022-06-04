@@ -20,7 +20,12 @@ export class CartComponent implements OnInit {
   }
 
   ChangeQuantity(index:number,increase:boolean){
+    console.log("++++++++++++++++++cart++compon+++++++++++++++++++++ChangeQuantity++++++")
+    console.log(index)
+   
     this.cartService.UpdateCartItems(index,increase);
   }
+
+  
 
 }

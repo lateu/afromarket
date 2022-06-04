@@ -28,19 +28,19 @@ export class HomeComponent implements OnInit {
     }
     this._productServ.getAllProducts().subscribe((prods:ServerResponse)=>{
       //var json = JSON.parse(prods.valueOf(count()));
-      console.log('---------------HOME--------COMPON------------------------')
+      /*console.log('---------------HOME--------COMPON------------------------')
       console.log(prods)
-      console.log(prods.products)
+      console.log(prods.products)*/
       this.products=prods.products;
     })
     }
 
 
-  selectedProduct(id: number) {
+  selectedProduct(id: string) {
     this.router.navigate(['/product',id]).then()
   }
 
-  AddToCart(id: number) {
+  AddToCart(id: string) {
     this._cardService.AddProductToCart(id);
   }
 

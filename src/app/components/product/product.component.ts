@@ -30,8 +30,8 @@ export class ProductComponent implements OnInit,AfterViewInit {
       })
     ).subscribe(prodId=>{
      
-      this.id=Number(prodId);
-      this.productService.getSingleProduct(this.id).subscribe(prod=>{
+     
+      this.productService.getSingleProduct(prodId).subscribe(prod=>{
         this.product=prod;
         
         if(prod.images!=null){
@@ -83,7 +83,7 @@ export class ProductComponent implements OnInit,AfterViewInit {
   addToCart(id:number){
     let value=Number(this.quantityOrder.nativeElement.value);
     if(value>0){
-      this.cartService.AddProductToCart(id,this.quantityOrder.nativeElement.value);
+      this.cartService.AddProductToCart(id.toString(),this.quantityOrder.nativeElement.value);
     }else{
       this.cartService.DeleteProductFromCart(id)
     }

@@ -28,15 +28,15 @@
                         
                         <td>
                             <form>
-                                <div class="value-buton" id="decrease" (click)="ChangeQuantity(i,false)">
+                              <div class="value-buton" id="decrease" (click)="ChangeQuantity(i,false)">
                                     <i class="fa fa-minus"></i>
 
                                 </div>
                                 <input type="number" id="number" [value]="c.numInCart" readonly [max]="c.product?.quantity"/>
-                                <div class="value-buton" id="increase" (click)="ChangeQuantity(i,true)">
+                             <div class="value-buton" id="increase" (click)="ChangeQuantity(i,true)">
                                     <i class="fa fa-plus"></i>
 
-                                </div>
+                                </div> 
                             </form>
                             
                         </td>

@@ -12,8 +12,10 @@ export interface CartModelPublic {
   total: number;
   prodData: [
     {
-      id: number,
-      incart: number
+      id: string,
+      incart: number,
+      name:string
+      price: number,
     }
   ];
 }

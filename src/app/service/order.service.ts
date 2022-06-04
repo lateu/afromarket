@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
@@ -12,9 +12,15 @@ export class OrderService {
 
   constructor(private http:HttpClient) { }
 
-  getSingleOrder(orderId:number){
+  getSingleOrder(orderId:string,userId:string,token,){
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept':'application/json',
+      "Authorization":"Bearer " + token
+       });
+    let options={headers}
 
-    return this.http.get<ProductResponseModel[]>(this.Server_URL+'/orders/'+orderId).toPromise();
+    return this.http.get<ProductResponseModel[]>(this.Server_URL+'/order/'+orderId+'/'+userId,options).toPromise();
 
   }
 }

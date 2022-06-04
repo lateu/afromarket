@@ -1,5 +1,5 @@
 export  interface  ProductModelServer{
-  _id: number;
+  _id: string;
   name: string;
   category: string;
   description: string;

@@ -23,7 +23,7 @@ export class PictureComponent implements OnInit {
     this.photo_url=this.SERVER_URL+"/product/photo/"+this.id;
   }
 
-  selectedProduct(id: number) {
+  selectedProduct(id: string) {
     this.router.navigate(['/product',id]).then()
   }
 

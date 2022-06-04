@@ -7,7 +7,7 @@
                 <div class="col-md-12">
                     <ul class="breadcrumb-tree">
                         <li><a href="#">Home</a></li>
-                        <li><a href="#">{{product.category}}</a></li>
+                        <li><a href="#">{{product.category.name}}</a></li>
                         <li class="active">{{product.name}}</li>
                     </ul>
                 </div>
@@ -29,12 +29,14 @@
                     <div id="product-main-img">
                         <ng-template [ngIf]="thumbImages.length==0">
                             <div class="product-preview">
-                                <img [src] ="product.image" alt="{{product.name}}">
+                                <app-picture [id]="product._id" [name]="product.name" ></app-picture>
+                               
                             </div>
                         </ng-template>
                         <ng-template [ngIf]="thumbImages.length>0">
                             <div class="product-preview"  *ngFor="let item of thumbImages">
                                 <img [src] ="item" alt="{{product.name}}">
+                               
                             </div>
                         </ng-template>
                     </div>
@@ -109,7 +111,7 @@
                                     <span class="qty-down" (click)="Decrease()">-</span>
                                 </div>
                             </div>
-                            <button class="add-to-cart-btn" (click)="addToCart(product?.id)"><i class="fa fa-shopping-cart"></i> Add to cart</button>
+                            <button class="add-to-cart-btn" (click)="addToCart(product?._id)"><i class="fa fa-shopping-cart"></i> Add to cart </button>
                         </div>
 
                         <ul class="product-btns">

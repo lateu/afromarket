@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import {CartModelPublic, CartModelServer} from "../models/Cart";
 import {BehaviorSubject} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {NavigationExtras, Router} from "@angular/router";
 import {ProductModelServer} from "../models/Product";
 import { ProductService } from './product.service';
@@ -22,7 +22,10 @@ private cartDataclient:CartModelPublic={
   total:0,
   prodData:[{
     incart:0,
-    id:0
+    id:"",
+    name:"",
+    price:0
+   
   }]
 };
 
@@ -33,6 +36,7 @@ private cartDataServer:CartModelServer={
   data:[{
     product:undefined,
     numInCart : 0,
+    //name:""
     
     //product:{id:-1,name:'NO-Name',category:'',description:'',image:'',price:0,quantity:0,images:''}
   }]
@@ -56,10 +60,10 @@ constructor(private http:HttpClient,
     // get the information from local storage (if any)
 
     let token=localStorage.getItem('cart')
-    console.log("-------------cart service contructor access-1---")
+    //console.log("-------------cart service contructor access-1---")
  
     if(token!==null){
-      console.log("-------------cart service contructor access-2--no empty cart-")
+      //console.log("-------------cart service contructor access-2--no empty cart-")
       let info: CartModelPublic=JSON.parse(token);
 
     // check if the info variable is null or has some data in it
@@ -103,7 +107,7 @@ constructor(private http:HttpClient,
     }
 
 
-    AddProductToCart(id:number, quantity?:number){
+    AddProductToCart(id:string, quantity?:number){
 
       this.productservice.getSingleProduct(id).subscribe(prod=>{
       //if the cart is empty
@@ -111,12 +115,14 @@ constructor(private http:HttpClient,
       if(this.cartDataServer.data[0].product===undefined){
        this.cartDataServer.data[0].product=prod;
         this.cartDataServer.data[0].numInCart=quantity!==undefined?quantity:1;
-        
+       
 
         this.CalculateTotal();
        
         this.cartDataclient.prodData[0].incart=this.cartDataServer.data[0].numInCart;
         this.cartDataclient.prodData[0].id=prod._id;
+        this.cartDataclient.prodData[0].name=prod.name;
+        this.cartDataclient.prodData[0].price=prod.price
         this.cartDataclient.total=this.cartDataServer.total;
         localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
         this.cartData$.next({...this.cartDataServer});
@@ -137,7 +143,7 @@ constructor(private http:HttpClient,
         // a- if that item is already in the cart=> index is positive value
 
         if(index!==-1){
-          console.log('+++++++++++++++++++++++++++AddProductToCart++++add more+++++++++++++++++++++++')
+          //console.log('+++++++++++++++++++++++++++AddProductToCart++++add more+++++++++++++++++++++++')
 
           if(quantity!==undefined && quantity<=prod.quantity){
             this.cartDataServer.data[index].numInCart=this.cartDataServer.data[index].numInCart<prod.quantity?quantity:prod.quantity;
@@ -168,11 +174,13 @@ constructor(private http:HttpClient,
          });
          this.cartDataclient.prodData.push({
            incart:1,
-           id:prod._id
+           id:prod._id,
+           name:prod.name,
+           price:prod.price
          });
-          console.log('+++++++++++++++++++++++++++AddProductToCart++++add new+++++++++++++++++++++++')
+         // console.log('+++++++++++++++++++++++++++AddProductToCart++++add new+++++++++++++++++++++++')
           //delete this.cartDataclient.prodData[0];
-          console.log(this.cartDataclient.prodData[0])
+          //console.log(this.cartDataclient.prodData[0])
 
     
          this.CalculateTotal();
@@ -213,6 +221,7 @@ UpdateCartItems(index:number,increase:boolean){
   }else{
     data.numInCart--;
     if(data.numInCart<1){
+       // to be fix later
       this.DeleteProductFromCart(index);
       this.cartData$.next({...this.cartDataServer});  
     }else{
@@ -231,14 +240,18 @@ UpdateCartItems(index:number,increase:boolean){
 DeleteProductFromCart(index:number){
 
   if(window.confirm('Are you sure you want to remove the item?')){
+
+    // to be fix later
     this.cartDataServer.data.splice(index,1);
     this.cartDataclient.prodData.splice(index,1);
+
+    
     //TODO CALCULATE TOTAL AMOUNT
     
     this.CalculateTotal();
     this.cartDataclient.total=this.cartDataServer.total;
     if(this.cartDataclient.total===0){
-      this.cartDataclient={prodData:[{incart:0,id:0,}],total:0}
+      this.cartDataclient={prodData:[{incart:0,id:"",name:"",price:0}],total:0}
       localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
     }else{
       localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
@@ -275,32 +288,49 @@ private CalculateTotal(){
   this.cartTotal$.next(this.cartDataServer.total);
 }
 
-public CheckOutFromCart(userId:Number){
-  const body=JSON.stringify({userId:userId,
-    products:this.cartDataclient.prodData
-  })
-  this.http.post(`${this.serverURL}/orders/payment`,null).subscribe((res:any /*original value res:{success:boolean}*/)=>{
+public CheckOutFromCart(){
+  
+  const loginData=JSON.parse(localStorage.getItem("jwt")) 
+  const userId=loginData["user"]['_id']
+  const token=loginData['token']
+  /*console.log("-*----------------order------data----")
+  console.log(this.cartDataclient.prodData)*/
+  let headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Accept':'application/json',
+    "Authorization":"Bearer " + token
+     });
+  let options={headers}
+  const body=JSON.stringify({userId:userId,products:this.cartDataclient.prodData})
+
+  this.http.post(`${this.serverURL}/order/payment/${userId}`,null,options).subscribe((res:any /*original value res:{success:boolean}*/)=>{
   // console.clear();
-  res.success=true;
+  //res.success=true;
   if(res.success){
     this.resetServerData();
-    this.http.post(`${this.serverURL}/orders/new`,{userId:userId,
+    this.http.post(`${this.serverURL}/order/create/${userId}`,{userId:userId,
                                                   products:this.cartDataclient.prodData
-                                                }).subscribe((data:any /**original value data:OrderResponse */)=>{
-                                                  this.orderService.getSingleOrder(data.order_id).then(prods=>{
-                                                    if(data.success){
+                                                },options).subscribe((data:any /**original value data:OrderResponse */)=>{
+                                                  /*console.log("---------------------newly create order----------------")
+                                                  console.log(data.products)*/
+                                                  this.orderService.getSingleOrder(data._id,userId,token).then(prods=>{
+                                                    /*console.log("---------------------newly create order------retrieved----------")
+                                                    console.log(prods)*/
+                                                  
+                                                    if(data._id){
                                                       const navigationExtras:NavigationExtras={
                                                         state:{
-                                                          message:data.message,
-                                                          products:prods,
-                                                          orderId:data.order_id,
+                                                          message:`Order successfully placed with order id ${data._id}`,
+                                                          //products:prods,
+                                                          products:data.products,
+                                                          orderId:data._id,
                                                           total:this.cartDataclient.total
                                                         }
                                                       };
                                                       //TODO HIDE SPINNER
                                                       this.spinner.hide().then();
                                                       this.router.navigate(['/thankyou'],navigationExtras).then(p=>{
-                                                        this.cartDataclient={total:0,prodData:[{incart:0,id:0}]};
+                                                        this.cartDataclient={total:0,prodData:[{incart:0,id:"",name:"",price:0}]};
                                                         this.cartTotal$.next(0);
                                                         localStorage.setItem('cart',JSON.stringify(this.cartDataclient));
                                                       })
@@ -330,7 +360,7 @@ private resetServerData(){
     total:0,
     data:[{
       numInCart:0,
-      product:{_id:0,name:'',category:'',description:'',image:'',price:0,quantity:0,images:''}
+      product:{_id:"",name:'',category:'',description:'',image:'',price:0,quantity:0,images:''}
     }]
   };
 }
@@ -351,11 +381,12 @@ CalculateSubTotal(index:number){
 }
 
 interface OrderResponse{
-  order_id:number;
+  _id:number;
   success:boolean;
   message:string;
   products:[{
     id:number,
-    numInCart:string
+    numInCart:string,
+    name:string
   }];
 }
