@@ -292,6 +292,7 @@ public CheckOutFromCart(){
   
   const loginData=JSON.parse(localStorage.getItem("jwt")) 
   const userId=loginData["user"]['_id']
+  
   const token=loginData['token']
   /*console.log("-*----------------order------data----")
   console.log(this.cartDataclient.prodData)*/
@@ -313,7 +314,7 @@ public CheckOutFromCart(){
                                                 },options).subscribe((data:any /**original value data:OrderResponse */)=>{
                                                   /*console.log("---------------------newly create order----------------")
                                                   console.log(data.products)*/
-                                                  this.orderService.getSingleOrder(data._id,userId,token).then(prods=>{
+                                                  //this.orderService.getSingleOrder(data._id,userId,token).then(prods=>{
                                                     /*console.log("---------------------newly create order------retrieved----------")
                                                     console.log(prods)*/
                                                   
@@ -345,7 +346,7 @@ public CheckOutFromCart(){
                                                       })
                                                     }
 
-                                                  })
+                                                  //})
                                                  
 
                                                 });

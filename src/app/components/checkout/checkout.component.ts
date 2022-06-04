@@ -20,16 +20,25 @@ export class CheckoutComponent implements OnInit {
               private spinner:NgxSpinnerService) { }
 
   ngOnInit(): void {
-    this.cartService.cartData$.subscribe((data:CartModelServer)=>this.cartData=data);
-    this.cartService.cartTotal$.subscribe(total=>this.cartTotal=total);
+    this.cartService.cartData$.subscribe((data:CartModelServer)=>{this.cartData=data});
+    this.cartService.cartTotal$.subscribe(total=>{this.cartTotal=total});
   }
 
   doCheckout(){
     this.spinner.show().then(p=>{
  
-      //console.log("-*----------------login------data----")
-      const loginData=JSON.parse(localStorage.getItem("jwt")) 
-      const userId=loginData["user"]['_id']
+      console.log("-*-------doCheckout------called--")
+      
+
+
+      try {
+        const loginData=JSON.parse(localStorage.getItem("jwt")) 
+        const userId=loginData["user"]['_id']
+      } catch (error) {
+        this.router.navigateByUrl('/login')
+      }
+
+      
      
 
       //this.cartService.CheckOutFromCart(userId);
